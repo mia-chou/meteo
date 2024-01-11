@@ -10,49 +10,63 @@ function refreshWeather(response) {
     let iconElement = document.querySelector("#icon");
   
     cityElement.innerHTML = response.data.city;
-  timeElement.innerHTML = formatDate(date);
-  descriptionElement.innerHTML = response.data.condition.description;
-  humidityElement.innerHTML = `${response.data.temperature.humidity}%`;
-  windSpeedElement.innerHTML = `${response.data.wind.speed}km/h`;
-  temperatureElement.innerHTML = Math.round(temperature);
-  iconElement.innerHTML = `<img src="${response.data.condition.icon_url}" class="weather-app-icon" />`;
-}
-
-function formatDate(date) {
-  let minutes = date.getMinutes();
-  let hours = date.getHours();
-  let days = [
-    "Sunday",
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-    "Friday",
-    "Saturday",
-  ];
-  let day = days[date.getDay()];
-
-  if (minutes < 10) {
-    minutes = `0${minutes}`;
+    timeElement.innerHTML = formatDate(date);
+    descriptionElement.innerHTML = response.data.condition.description;
+    humidityElement.innerHTML = `${response.data.temperature.humidity}%`;
+    windSpeedElement.innerHTML = `${response.data.wind.speed}km/h`;
+    temperatureElement.innerHTML = Math.round(temperature);
+    iconElement.innerHTML = `<img src="${response.data.condition.icon_url}" class="weather-app-icon" />`;
+  
+    getForecast(response.data.city);
   }
-
-  return `${day} ${hours}:${minutes}`;
-}
-
-function getForecast(city){
+  
+  function formatDate(date) {
+    let minutes = date.getMinutes();
+    let hours = date.getHours();
+    let days = [
+      "Sunday",
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
+    ];
+    let day = days[date.getDay()];
+  
+    if (minutes < 10) {
+      minutes = `0${minutes}`;
+    }
+  
+    return `${day} ${hours}:${minutes}`;
+  }
+  
+  function searchCity(city) {
+    let apiKey = "99e882a3db10efo5bb4b346d32e0a6t0";
+  let apiUrl = `https://api.shecodes.io/weather/v1/current?query=${city}&key=${apiKey}`;
+  axios.get(apiUrl).then(refreshWeather);
+  }
+  
+  function handleSearchSubmit(event) {
+    event.preventDefault();
+    let searchInput = document.querySelector("#search-form-input");
+  
+    searchCity(searchInput.value);
+  }
+  
+  function formatDay(timestamp) {
+    let date = new Date(timestamp * 1000);
+    let days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+  
+    return days[date.getDay()];
+  }
+  
+  
+function getForecast(city) {
 let apiKey = "99e882a3db10efo5bb4b346d32e0a6t0";
 let apiUrl = `https://api.shecodes.io/weather/v1/current?query=${city}&key=${apiKey}`;
 axios(apiUrl).then(displayForecast);
 
-
-}
-
-  
-
-  function searchCity(city) {
-  let apiKey = "99e882a3db10efo5bb4b346d32e0a6t0";
-let apiUrl = `https://api.shecodes.io/weather/v1/current?query=${city}&key=${apiKey}`;
-axios.get(apiUrl).then(refreshWeather);
 }
 
 function displayForecast(response) {
@@ -79,35 +93,14 @@ function displayForecast(response) {
       `;
       }
     });
-
-
-function handleSearchSubmit(event) {
-event.preventDefault();
-let searchInput = document.querySelector("#search-form-input");
-
-
-
-
-searchCity(searchInput.value);
-}
-
-function formatDay(timestamp) {
-    let date = new Date(timestamp * 1000);
-    let days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
   
-    return days[date.getDay()];
+    let forecastElement = document.querySelector("#forecast");
+    forecastElement.innerHTML = forecastHtml;
   }
   
-
-let searchFormElement = document.querySelector("#search-form");
-searchFormElement.addEventListener("submit", handleSearchSubmit);
-
-let forecast = document.querySelector("#forecast");
-forecastElement.innerHTML = forecastHtml;
-
-
-
-searchCity("Leeds");
+  let searchFormElement = document.querySelector("#search-form");
+  searchFormElement.addEventListener("submit", handleSearchSubmit);
+  
 displayForecast();
 
 
