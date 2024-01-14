@@ -41,6 +41,34 @@ function refreshWeather(response) {
     return `${day} ${hours}:${minutes}`;
   }
   
+  
+  
+  
+  function formatDate(date) {
+    let hours = date.getHours();
+    let minutes = date.getMinutes();
+    
+    let days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+    let months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    
+    let month = months[date.getMonth()];
+    let number = date.getDate();
+    let day = days[date.getDay()];
+    
+    // Adding zero-padding for single-digit minutes
+    minutes = (minutes < 10) ? `0${minutes}` : minutes;
+  
+    return `It is ${day}, ${number} ${month} and the time is ${hours}:${minutes}`;
+  }
+  
+  
+  
+  
+  
+  
+  
+  
+  
   function searchCity(city) {
     let apiKey = "99e882a3db10efo5bb4b346d32e0a6t0";
     let apiUrl = `https://api.shecodes.io/weather/v1/current?query=${city}&key=${apiKey}&units=metric`;
