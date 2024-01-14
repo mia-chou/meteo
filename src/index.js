@@ -55,10 +55,8 @@ function refreshWeather(response) {
     let number = date.getDate();
     let day = days[date.getDay()];
     
-    // Adding zero-padding for single-digit minutes
-    minutes = (minutes < 10) ? `0${minutes}` : minutes;
   
-    return `It is ${day}, ${number} ${month} and the time is ${hours}:${minutes}`;
+    return `It is ${day}, ${number} ${month}`;
   }
   
   
